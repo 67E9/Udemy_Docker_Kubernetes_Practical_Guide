@@ -1,0 +1,50 @@
+Dockerize BOTH apps - the Python and the Node app.
+
+1) Create appropriate images for both apps (two separate images!).
+HINT: Have a brief look at the app code to configure your images correctly!
+
+2) Launch a container for each created image, making sure, 
+that the app inside the container works correctly and is usable.
+
+docker run -p 3000:3000 b3959cdba6baf53a9ae9d29a4726614cc13aff0716eab62
+docker run -it e9af7d63d3222d4aa2f84d2dc87a28f5db847a2f40dbbb4
+
+3) Re-create both containers and assign names to both containers.
+Use these names to stop and restart both containers.
+
+docker run -p 3000:3000 --name nodeMeUp b39
+docker stop nodeMeUp
+docker start nodeMeUp
+
+docker run --name youAreFatPy -it e9af7d63d3222d4aa2f84d2dc87a28f5db847a2f40dbbb4
+docker stop youAreFatPy
+docker start -a -i youAreFatPy
+
+4) Clean up (remove) all stopped (and running) containers, 
+clean up all created images.
+
+docker rmi <id> <id> ...
+docker rm <id> <id> ...
+
+5) Re-build the images - this time with names and tags assigned to them.
+
+cd node-app
+docker build --tag assigment1node .
+
+cd ../python-app
+docker build --tag assignment1python .
+
+
+6) Run new containers based on the re-built images, ensuring that the containers
+are removed automatically when stopped.
+
+docker run -p 3000:3000 --name basicNode --rm assigment1node
+
+docker run -it --name fatPy --rm assignment1python
+
+push image to registry e.g. dockerhub:
+- sign up with dockerhub
+- docker login
+- docker push USER_ID/IMAGE_NAME <-- USER-ID must be part of repository name
+- docker pul IMAGE_NAME
+<-- URL instead of name if registry is not dockerhub
