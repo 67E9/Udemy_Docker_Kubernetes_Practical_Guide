@@ -8,7 +8,11 @@ RUN npm install
 
 COPY . .
 
-ENV PORT 80
+#build-time argument, set using --build-arg KEY=value
+ARG DEFAULT_PORT=80
+
+#run-time environment variable => set using --env KEY=value
+ENV PORT ${DEFAULT_PORT}
 
 EXPOSE $PORT
 

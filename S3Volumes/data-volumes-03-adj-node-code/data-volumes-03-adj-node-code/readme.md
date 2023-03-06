@@ -61,14 +61,25 @@ docker volume inspect => see details about volume
 docker volume rm => delete one volume
 docker volume prune => delete all alused volumes
 
-__env variables__
+__runtime environment variables__
 
-configure values from outside
+configure values from outside (for runtime)
 
 in Dockerfile:
 ENV KEY value
 
 in commandline:
---env KEY=value
+docker run --env KEY=value ...
 
 in node-js-code: access via process.env.KEYg
+
+__build time arguments__
+
+configure default values at build time
+with tags this allows you to build different images with different default values based on one code base
+
+in Dockerfile
+ARG KEY=value
+
+in commandline
+docker build --build-arg KEY=value
