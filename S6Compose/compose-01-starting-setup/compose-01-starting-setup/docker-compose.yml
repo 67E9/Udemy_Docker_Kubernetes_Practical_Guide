@@ -1,0 +1,70 @@
+# version of docker compose specification
+version: "3.8"
+# services = containers in the project
+# --rm -d are default in compose
+services:
+  mongodb:
+    image: 'mongo'
+    volumes: 
+      #same sytanx as behind -v
+      - mongo-goals:/data/db
+    #environment:
+      # - MONGO_INITDB_ROOT_USERNAME=admin
+      # - MONGO_INITDB_ROOT_PASSWORD=password
+      # alt syntax
+      # MONGO_INITDB_ROOT_USERNAME: admin
+      # env-file
+    env_file:
+      - ./env/mongo.env
+    # services are added to a network by default
+    # therefore manually setting networks is optional
+    # networks:
+      # - goals-net
+  backend:
+    # build context will be location of dockerfile specified in build
+    #specify location of Dockerfile
+    build: ./backend
+    # alt syntax
+    # build: 
+    #   context: ./backend
+    #   dockerfile: Dockerfile # here you can give name of Dockerfile, in case it has a different name
+    # args:
+    #   some-agr: 'val'
+    ports: 
+      - '80:80'
+    volumes:
+      - ./backend:/app #use relativ path from docker-compose.yml
+      - /app/node_modules
+      - logs:/app/logs
+    env_file:
+      - ./env/backend.env
+    depends_on:
+      - mongodb #bring mongodb up first!
+  frontend:
+    build: ./frontend
+    volumes:
+      - ./frontend/src:/app/src
+    ports:
+      - '3000:3000'
+    depends_on:
+     - backend    
+    # equivalent to -i
+    stdin_open: true
+    # equivalent to -t
+    tty: true
+volumes: # specify named volumes here!!!
+  mongo-goals: #only key, no value
+  logs:
+
+# How to run this?
+# docker-compose up -d
+# --build => force rebuild app instead of reusing container
+# just building: docker-compose build
+# ---
+# How to stop it?
+# docker compose down
+# -v removes volumes
+
+#service names can be used in code to connect to container, even though the actual container name assigned by compose is longer
+#container names: prokjectfolder_servicename_number
+#force container name with container_name:
