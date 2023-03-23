@@ -11,3 +11,5 @@ COPY . .
 EXPOSE 80
 
 CMD ["node", "app.js"]
+
+#docker run -d -p 80:80 --name docker-dep-test --rm docker-deployment-node-img

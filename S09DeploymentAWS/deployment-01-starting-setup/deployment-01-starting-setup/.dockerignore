@@ -1,0 +1,4 @@
+*.pem
+*.ppk
+node_modules
+Dockerfile
