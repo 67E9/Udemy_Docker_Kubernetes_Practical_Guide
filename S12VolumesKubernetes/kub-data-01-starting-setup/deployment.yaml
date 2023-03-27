@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: story-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: story
+  template:
+    metadata:
+      labels:
+        app: story
+    spec:
+      containers:
+        - name: story
+          image: pmssdtest/kub-data-demo:3
+          imagePullPolicy: Always
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+          volumeMounts: 
+            - mountPath: /app/story
+              name: story-volume
+          env:
+            # - name: STORY_FOLDER
+            #   value: 'story'
+            - name: STORY_FOLDER
+              valueFrom:
+                configMapKeyRef:
+                  name: data-store-env
+                  key: folder
+      volumes:
+        - name: story-volume
+          # emptyDir: {} # this driver creates a new empty directory when pod is created, downside: data is only available on the associated pod, only for development
+          # hostPath: # mounts path on host machine / nost node, node specific, will fail, if you use multiple machines/nodes
+          #   path: /data # path on host machine, similar to bind mount
+          #   type: DirectoryOrCreate #options: Directory
+          # CSI:
+          persistentVolumeClaim:
+            claimName: host-pvc

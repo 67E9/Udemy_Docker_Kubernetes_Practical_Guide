@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: host-pv
+spec:
+  capacity:
+    storage: 4Gi # 4 GigaBytes
+  volumeMode: Filesystem # Filesystem or Block
+  storageClassName: standard
+  accessModes: #ReadWriteOnce, ReadOnlyMany, ReadWriteMany
+    - ReadWriteOnce # only available to be claimed by one node
+    # - ReadOnlyMany # can be read from multiple nodes, doesn't make sense for hostpath
+    # - ReadWriteMany # can be claimed my multiple nodes, doesn't make sense for hostpath
+  hostPath: # this will only work in a local environment with a single node like minikube, use different types of pv for production
+    path: /data 
+    type: DirectoryOrCreate 
