@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend
+  labels:
+    group: example
+spec:
+  selector:
+    app: second-app
+  ports:
+    - protocol: 'TCP'
+      port: 80  
+      targetPort: 8080 
+  type: LoadBalancer
+--- # separates 2 objects, good practive to put services on top
+apiVersion: apps/v1
+kind: Deployment 
+metadata: 
+  name: second-app-deployment
+  label:
+    group: example
+spec:
+  replicas: 1 
+  selector: 
+    matchLabels: 
+      app: second-app
+      tier: backend
+  template: 
+    metadata: 
+      labels:
+        app: second-app
+        tier: backend
+    spec: 
+      containers:
+        - name: second-node
+          image: pmssdtest/kub-first-app

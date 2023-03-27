@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment #Service, Job...
+metadata: # one metadata tag per object
+  name: second-app-deployment
+  labels:
+    group: example
+spec:
+  replicas: 1 #no of pod instances (default=1)
+  selector: # a deployment needs to select pods it creates
+    matchLabels: #tell control plane what Pods to control, each label is a key value pair
+      app: second-app
+      tier: backend
+    #matchExpressions:
+      #- {key: app, operator: In, values: [second-app, first-app]} 
+  # Pod starts here
+  # one Deployment can only include one type of Pod, but multiple replicas of it
+  template: 
+    #kind not required because Deployment template always is a pod
+    metadata: 
+      labels:
+        app: second-app
+        tier: backend
+    spec: #spec of pod
+      containers: #poc can contain multiple containers
+        - name: second-node
+          image: pmssdtest/kub-first-app
+          imagePullPolicy: Always # always pull image from dockerhub
+          livenessProbe: # manually set app healthcheck
+            httpGet:
+              path: /
+              port: 8080
+
+
+# check out kubernetes api reference
+# https://kubernetes.io/docs/reference/kubernetes-api/
+
+# run: 
+# start Docker Desktop
+# minikube start --driver=docker
+# kubectl apply -f=deployment.yaml
+
+#delete:
+# kubectl delete -f=deployment.yaml (-f=...) (by file)
+# kubectl delete deployments, services -l group=example (by selecotr/label)
