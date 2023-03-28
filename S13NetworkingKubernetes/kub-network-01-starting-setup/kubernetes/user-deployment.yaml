@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: users-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app-users
+  template:
+    metadata:
+      labels:
+        app: app-users
+    spec:
+      containers:
+      - name: users
+        image: pmssdtest/kub-demo-users:1
+        imagePullPolicy: Always
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        env:
+          - name: AUTH_ADDRESS
+            value: localhost
+      - name: auth
+        image: pmssdtest/kub-demo-auth:latest
+        #imagePullPolicy: Always
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+
