@@ -18,7 +18,7 @@ kubectl apply -f=deployment.yaml -f=service.yaml
 kubectl get deployment
 kubectl get pods
 kubectl get service 
-- verify it's runing
+- verify it's running
 
 minikube service story-service
 - expose service
@@ -26,8 +26,8 @@ minikube service story-service
 # volumes 
 
 - are inside of pods 
-- share the pod's lifecycle (will be remvoed with the pod)
-- are implemtend in the yaml for a deployment
+- share the pod's lifecycle (will be removed with the pod)
+- are implementend in the yaml for a deployment
 - there are many different types for different kinds of storage e.g.
     - emptyDir: only available withn one pod
     - hostPath: folder on host machien/node, available accross pods on the same node/machine

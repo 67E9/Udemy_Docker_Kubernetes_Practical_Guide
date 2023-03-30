@@ -1,34 +1,27 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: users-deployment
+  name: tasks-deployment
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: app-users
+      app: app-tasks
   template:
     metadata:
       labels:
-        app: app-users
+        app: app-tasks
     spec:
       containers:
-      - name: users
-        image: pmssdtest/kub-demo-users:3
+      - name: tasks
         imagePullPolicy: Always
+        image: pmssdtest/kub-demo-tasks:4
         resources:
           limits:
             memory: "128Mi"
             cpu: "500m"
         env:
           - name: AUTH_ADDRESS
-            #value: "10.111.206.255"
             value: "auth-service.default"
-      # - name: auth
-      #   image: pmssdtest/kub-demo-auth:latest
-      #   #imagePullPolicy: Always
-      #   resources:
-      #     limits:
-      #       memory: "128Mi"
-      #       cpu: "500m"
-
+          - name: TASKS_FOLDER
+            value: tasks

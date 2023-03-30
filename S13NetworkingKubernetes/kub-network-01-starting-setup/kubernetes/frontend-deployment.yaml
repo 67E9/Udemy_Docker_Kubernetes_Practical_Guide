@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app-frontend
+  template:
+    metadata:
+      labels:
+        app: app-frontend
+    spec:
+      containers:
+      - name: tasks
+        imagePullPolicy: Always
+        image: pmssdtest/kub-demo-frontend:latest
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+
